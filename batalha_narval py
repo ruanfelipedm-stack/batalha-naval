@@ -1,0 +1,56 @@
+Python
+import random
+
+TAMANHO = 5
+
+def criar_tabuleiro():
+    return [["~"] * TAMANHO for _ in range(TAMANHO)]
+
+def imprimir_tabuleiro(tabuleiro):
+    print("  0 1 2 3 4")
+    for i, linha in enumerate(tabuleiro):
+        print(i, " ".join(linha))
+
+def posicionar_navio():
+    return random.randint(0, TAMANHO - 1), random.randint(0, TAMANHO - 1)
+
+def jogo():
+    tabuleiro = criar_tabuleiro()
+    navio_linha, navio_coluna = posicionar_navio()
+    tentativas = 5
+
+    print("=== JOGO BATALHA NAVAL ===")
+
+    while tentativas > 0:
+        imprimir_tabuleiro(tabuleiro)
+        print(f"Tentativas restantes: {tentativas}")
+
+        try:
+            linha = int(input("Digite a linha (0-4): "))
+            coluna = int(input("Digite a coluna (0-4): "))
+        except ValueError:
+            print("Digite apenas números!")
+            continue
+
+        if linha == navio_linha and coluna == navio_coluna:
+            print("🎉 Parabéns! Você afundou o navio!")
+            tabuleiro[linha][coluna] = "X"
+            imprimir_tabuleiro(tabuleiro)
+            break
+        else:
+            if 0 <= linha < TAMANHO and 0 <= coluna < TAMANHO:
+                if tabuleiro[linha][coluna] == "~":
+                    tabuleiro[linha][coluna] = "O"
+                    print("💦 Água!")
+                else:
+                    print("Você já tentou essa posição.")
+            else:
+                print("Posição inválida!")
+
+        tentativas -= 1
+
+    if tentativas == 0:
+        print("😢 Fim de jogo! O navio estava em:",
+              navio_linha, navio_coluna)
+
+jogo()
